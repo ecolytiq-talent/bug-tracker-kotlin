@@ -1,0 +1,36 @@
+package com.ecolytiq.bugtracker.domain
+
+import com.ecolytiq.bugtracker.domain.Status.OPEN
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import org.hibernate.Hibernate
+import java.time.OffsetDateTime
+
+@Entity
+@Table(name = "tickets")
+data class Ticket(
+    @Id
+    val id: String? = null,
+    val title: String? = null,
+    @Enumerated(EnumType.STRING)
+    val status: Status = OPEN,
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as Ticket
+
+        return id != null && id == other.id
+    }
+
+    override fun hashCode(): Int = javaClass.hashCode()
+
+    @Override
+    override fun toString(): String {
+        return this::class.simpleName + "(id = $id , title = $title , status = $status , createdAt = $createdAt )"
+    }
+}
